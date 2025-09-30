@@ -718,7 +718,6 @@ Scope: Nur neue Dateien, keine bestehenden ändern!
     fieldGuide: [
       {
         fieldId: 'apiName',
-        label: 'API Name',
         explanation: 'Ein beschreibender Name für den Service',
         example: 'userService',
         tips:
