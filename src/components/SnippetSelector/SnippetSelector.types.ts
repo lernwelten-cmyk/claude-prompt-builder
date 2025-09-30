@@ -8,4 +8,5 @@ export interface SnippetSelectorProps {
   snippets: Snippet[];
   selectedSnippetId: string | null;
   onSnippetSelect: (snippetId: string) => void;
+  onInfoClick: (snippet: Snippet) => void;
 }

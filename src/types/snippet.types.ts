@@ -32,14 +32,30 @@ export type SnippetCategory =
   | 'other';
 
 /**
+ * Field Guide Item - Erklärt ein einzelnes Formular-Feld
+ */
+export interface FieldGuideItem {
+  fieldId: string; // Entspricht placeholder.id
+  explanation: string; // Was soll hier eingetragen werden?
+  example: string; // Konkretes Beispiel
+  tips?: string; // Optionale Tipps
+}
+
+/**
  * Snippet Type - Definition eines Prompt-Templates
  */
 export interface Snippet {
   id: string;
   name: string;
-  description: string;
+  description: string; // Kurze Beschreibung
   category: SnippetCategory;
   icon: string;
   template: string;
   placeholders: SnippetPlaceholder[];
+
+  // Erweiterte Dokumentation
+  longDescription: string; // Ausführliche Beschreibung (2-3 Sätze)
+  whenToUse: string; // Wann sollte dieser Prompt verwendet werden?
+  useCase: string; // Konkretes Fallbeispiel / Anwendungsfall
+  fieldGuide: FieldGuideItem[]; // Anleitung für jedes Formular-Feld
 }

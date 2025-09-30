@@ -25,6 +25,7 @@ export const SnippetSelector: React.FC<SnippetSelectorProps> = ({
   snippets,
   selectedSnippetId,
   onSnippetSelect,
+  onInfoClick,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<
@@ -103,6 +104,7 @@ export const SnippetSelector: React.FC<SnippetSelectorProps> = ({
               isSelected={selectedSnippetId === snippet.id}
               onSelect={() => onSnippetSelect(snippet.id)}
               onKeyDown={(e) => handleKeyDown(e, snippet.id)}
+              onInfoClick={() => onInfoClick(snippet)}
             />
           ))
         )}
@@ -120,6 +122,7 @@ interface SnippetCardProps {
   isSelected: boolean;
   onSelect: () => void;
   onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  onInfoClick: () => void;
 }
 
 const SnippetCard: React.FC<SnippetCardProps> = ({
@@ -127,6 +130,7 @@ const SnippetCard: React.FC<SnippetCardProps> = ({
   isSelected,
   onSelect,
   onKeyDown,
+  onInfoClick,
 }) => {
   return (
     <div
@@ -135,7 +139,7 @@ const SnippetCard: React.FC<SnippetCardProps> = ({
       onClick={onSelect}
       onKeyDown={onKeyDown}
       className={`
-        p-6 rounded-lg border-2 cursor-pointer transition-all
+        relative p-6 rounded-lg border-2 cursor-pointer transition-all
         focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400
         ${
           isSelected
@@ -146,6 +150,19 @@ const SnippetCard: React.FC<SnippetCardProps> = ({
       aria-label={`Snippet auswählen: ${snippet.name}`}
       aria-pressed={isSelected}
     >
+      {/* Info Button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onInfoClick();
+        }}
+        className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-700 text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 transition-all opacity-60 hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+        aria-label={`Info zu ${snippet.name}`}
+        title={`Info zu ${snippet.name}`}
+      >
+        ℹ️
+      </button>
+
       {/* Icon */}
       <div className="text-5xl mb-4 text-center">{snippet.icon}</div>
 

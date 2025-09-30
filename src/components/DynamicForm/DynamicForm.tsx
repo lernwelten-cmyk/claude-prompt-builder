@@ -5,12 +5,14 @@
  * Supports text, textarea, select, and multiline (array) inputs.
  */
 
+import { Tooltip } from '@/components/Tooltip';
 import type { DynamicFormProps } from './DynamicForm.types';
 
 export const DynamicForm: React.FC<DynamicFormProps> = ({
   placeholders,
   values,
   onChange,
+  fieldGuides,
 }) => {
   // Handle multiline field changes
   const handleMultilineChange = (id: string, index: number, value: string) => {
@@ -47,20 +49,44 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
 
   return (
     <div className="space-y-6">
-      {placeholders.map((placeholder) => (
-        <div key={placeholder.id} className="space-y-2">
-          {/* Label */}
-          <label
-            htmlFor={placeholder.id}
-            className="block text-sm font-medium text-gray-900 dark:text-gray-100"
-          >
-            {placeholder.label}
-            {placeholder.required && (
-              <span className="text-red-500 ml-1" aria-label="Pflichtfeld">
-                *
-              </span>
-            )}
-          </label>
+      {placeholders.map((placeholder) => {
+        // Find field guide for this placeholder
+        const guide = fieldGuides?.find((g) => g.fieldId === placeholder.id);
+
+        return (
+          <div key={placeholder.id} className="space-y-2">
+            {/* Label */}
+            <label
+              htmlFor={placeholder.id}
+              className="block text-sm font-medium text-gray-900 dark:text-gray-100"
+            >
+              {placeholder.label}
+              {placeholder.required && (
+                <span className="text-red-500 ml-1" aria-label="Pflichtfeld">
+                  *
+                </span>
+              )}
+              {/* Tooltip with Field Guide */}
+              {guide && (
+                <Tooltip
+                  content={
+                    <div className="text-sm">
+                      <p className="mb-2">{guide.explanation}</p>
+                      <p className="font-mono text-xs bg-black/20 p-1 rounded">
+                        Beispiel: {guide.example}
+                      </p>
+                      {guide.tips && (
+                        <p className="mt-2 text-yellow-200">💡 {guide.tips}</p>
+                      )}
+                    </div>
+                  }
+                >
+                  <span className="ml-2 cursor-help text-blue-500 hover:text-blue-600 transition-colors">
+                    ℹ️
+                  </span>
+                </Tooltip>
+              )}
+            </label>
 
           {/* Field based on type */}
           {placeholder.type === 'text' && (
@@ -150,8 +176,9 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
               </button>
             </div>
           )}
-        </div>
-      ))}
+          </div>
+        );
+      })}
     </div>
   );
 };

@@ -5,7 +5,9 @@ import { DynamicForm } from '@/components/DynamicForm';
 import { PromptPreview } from '@/components/PromptPreview';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import DocumentManager from '@/components/DocumentManager';
+import { SnippetInfoModal } from '@/components/SnippetInfoModal';
 import { documentStorage } from '@/utils/documentStorage';
+import type { Snippet } from '@/types/snippet.types';
 
 function App() {
   // Dark Mode State (from localStorage)
@@ -30,6 +32,11 @@ function App() {
   // Document Manager State
   const [isDocumentManagerOpen, setIsDocumentManagerOpen] = useState(false);
   const [documentCount, setDocumentCount] = useState(0);
+
+  // Snippet Info Modal State
+  const [infoModalSnippet, setInfoModalSnippet] = useState<Snippet | null>(
+    null
+  );
 
   // Get selected snippet
   const selectedSnippet = useMemo(
@@ -204,6 +211,7 @@ function App() {
             snippets={SNIPPETS}
             selectedSnippetId={selectedSnippetId}
             onSnippetSelect={handleSnippetSelect}
+            onInfoClick={(snippet) => setInfoModalSnippet(snippet)}
           />
         </section>
 
@@ -217,6 +225,7 @@ function App() {
                 placeholders={selectedSnippet.placeholders}
                 values={formValues}
                 onChange={handleFormChange}
+                fieldGuides={selectedSnippet.fieldGuide}
               />
             </div>
 
@@ -241,6 +250,13 @@ function App() {
       <DocumentManager
         isOpen={isDocumentManagerOpen}
         onClose={() => setIsDocumentManagerOpen(false)}
+      />
+
+      {/* Snippet Info Modal */}
+      <SnippetInfoModal
+        snippet={infoModalSnippet}
+        isOpen={infoModalSnippet !== null}
+        onClose={() => setInfoModalSnippet(null)}
       />
     </div>
   );
