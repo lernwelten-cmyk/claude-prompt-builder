@@ -3,6 +3,7 @@ import { SNIPPETS } from '@/constants/snippets';
 import { SnippetSelector } from '@/components/SnippetSelector';
 import { DynamicForm } from '@/components/DynamicForm';
 import { PromptPreview } from '@/components/PromptPreview';
+import { InstallPrompt } from '@/components/InstallPrompt';
 
 function App() {
   // Dark Mode State (from localStorage)
@@ -179,6 +180,9 @@ function App() {
           </section>
         )}
       </main>
+
+      {/* PWA Install Prompt */}
+      <InstallPrompt />
     </div>
   );
 }
