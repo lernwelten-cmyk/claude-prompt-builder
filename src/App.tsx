@@ -4,6 +4,8 @@ import { SnippetSelector } from '@/components/SnippetSelector';
 import { DynamicForm } from '@/components/DynamicForm';
 import { PromptPreview } from '@/components/PromptPreview';
 import { InstallPrompt } from '@/components/InstallPrompt';
+import DocumentManager from '@/components/DocumentManager';
+import { documentStorage } from '@/utils/documentStorage';
 
 function App() {
   // Dark Mode State (from localStorage)
@@ -25,6 +27,10 @@ function App() {
   // Copy State
   const [isCopied, setIsCopied] = useState(false);
 
+  // Document Manager State
+  const [isDocumentManagerOpen, setIsDocumentManagerOpen] = useState(false);
+  const [documentCount, setDocumentCount] = useState(0);
+
   // Get selected snippet
   const selectedSnippet = useMemo(
     () => SNIPPETS.find((s) => s.id === selectedSnippetId) || null,
@@ -40,6 +46,39 @@ function App() {
     }
     localStorage.setItem('darkMode', isDarkMode.toString());
   }, [isDarkMode]);
+
+  // Update document count
+  useEffect(() => {
+    const updateDocumentCount = () => {
+      setDocumentCount(documentStorage.getAll().length);
+    };
+
+    updateDocumentCount();
+
+    // Listen for storage changes
+    window.addEventListener('storage', updateDocumentCount);
+    return () => window.removeEventListener('storage', updateDocumentCount);
+  }, [isDocumentManagerOpen]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyboard = (e: KeyboardEvent) => {
+      // Ctrl+D for Documents
+      if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+        e.preventDefault();
+        setIsDocumentManagerOpen((prev) => !prev);
+      }
+
+      // Escape closes DocumentManager
+      if (e.key === 'Escape' && isDocumentManagerOpen) {
+        e.preventDefault();
+        setIsDocumentManagerOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyboard);
+    return () => window.removeEventListener('keydown', handleKeyboard);
+  }, [isDocumentManagerOpen]);
 
   // Handle snippet selection (reset form values)
   const handleSnippetSelect = (snippetId: string) => {
@@ -120,16 +159,30 @@ function App() {
             <span>Claude Prompt Builder</span>
           </h1>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             {selectedSnippetId && (
               <button
                 onClick={handleReset}
-                className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="px-3 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm"
                 aria-label="Zurücksetzen"
               >
-                ↺ Reset
+                ↺ <span className="hidden sm:inline">Reset</span>
               </button>
             )}
+
+            <button
+              onClick={() => setIsDocumentManagerOpen(true)}
+              className="px-3 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 flex items-center gap-2 text-sm"
+              aria-label="Dokumenten-Verwaltung öffnen"
+            >
+              <span>📚</span>
+              <span className="hidden sm:inline">Dokumente</span>
+              {documentCount > 0 && (
+                <span className="bg-blue-500 text-white text-xs rounded-full px-2 py-0.5">
+                  {documentCount}
+                </span>
+              )}
+            </button>
 
             <button
               onClick={toggleDarkMode}
@@ -183,6 +236,12 @@ function App() {
 
       {/* PWA Install Prompt */}
       <InstallPrompt />
+
+      {/* Document Manager Modal */}
+      <DocumentManager
+        isOpen={isDocumentManagerOpen}
+        onClose={() => setIsDocumentManagerOpen(false)}
+      />
     </div>
   );
 }
