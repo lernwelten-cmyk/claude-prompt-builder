@@ -1835,4 +1835,404 @@ Denk groß und sei mutig mit Ideen! 🚀`,
       },
     ],
   },
+
+  // 17. Git Push & Deployment
+  {
+    id: 'cgitpush',
+    name: 'Git Push & Deployment',
+    description: 'Strukturierter Git Workflow mit intelligenten Commit-Messages',
+    category: 'other',
+    icon: '🚀',
+    template: `[Kontext: DEVELOPMENT.md]
+
+🚀 Git Push & Deployment Vorbereitung
+
+Projekt-Status analysieren und optimalen Git-Workflow vorschlagen.
+
+Aktuelle Änderungen:
+{{changesSummary}}
+
+Deployment-Ziel: {{deploymentTarget}}
+
+Aufgaben:
+
+1. **Änderungs-Analyse:**
+   - Prüfe welche Dateien geändert wurden
+   - Kategorisiere Änderungen:
+     * Features (feat)
+     * Bugfixes (fix)
+     * Refactoring (refactor)
+     * Dokumentation (docs)
+     * Styling (style)
+     * Tests (test)
+     * Chores (chore)
+   - Identifiziere Breaking Changes
+
+2. **Commit-Message Vorschlag:**
+   Schlage eine strukturierte Commit-Message vor im Format:
+   \`\`\`
+   <type>(<scope>): <subject>
+
+   <body>
+
+   <footer>
+   \`\`\`
+
+   Beispiel:
+   \`\`\`
+   feat(prompt-builder): add document management system
+
+   - Add DocumentManager component with full CRUD
+   - Implement localStorage persistence
+   - Add markdown editor with preview
+   - Include category filtering and search
+
+   Closes #42
+   \`\`\`
+
+3. **Pre-Push Checkliste:**
+   Erstelle eine Checkliste mit:
+   - [ ] Tests laufen durch (npm test)
+   - [ ] Build erfolgreich (npm run build)
+   - [ ] Keine console.logs in Production Code
+   - [ ] Environment Variables korrekt gesetzt
+   - [ ] Dependencies aktualisiert (npm audit)
+   - [ ] README.md aktualisiert (falls nötig)
+   - [ ] {{customCheckpoint}}
+
+4. **Git Commands:**
+   Gib die exakten Git-Commands:
+   \`\`\`bash
+   # Staging
+   git add [spezifische Dateien oder .]
+
+   # Commit
+   git commit -m "[generierte Message]"
+
+   # Push
+   git push origin {{branch}}
+
+   # Optional: Tag erstellen
+   git tag -a v{{version}} -m "Release {{version}}"
+   git push origin v{{version}}
+   \`\`\`
+
+5. **Deployment-Hinweise:**
+   Für {{deploymentTarget}}:
+   - Spezifische Hinweise zur Plattform
+   - Build-Logs wo zu finden
+   - Preview-Links bei PRs
+   - Production vs. Preview Branches
+
+6. **Post-Deployment Checks:**
+   - [ ] Live-URL testen: {{liveUrl}}
+   - [ ] Neue Features funktionieren
+   - [ ] Keine Console-Errors
+   - [ ] Performance okay (Lighthouse)
+   - [ ] Mobile-Ansicht prüfen
+
+7. **Rollback-Plan:**
+   Falls etwas schief geht:
+   \`\`\`bash
+   # Letzten Commit rückgängig (lokal)
+   git reset --soft HEAD~1
+
+   # Oder: Force-Push von vorherigem Commit
+   git revert HEAD
+   git push origin {{branch}}
+   \`\`\`
+
+WICHTIG:
+- Sei präzise mit der Commit-Message
+- Gruppiere zusammengehörige Änderungen
+- Erwähne Breaking Changes explizit
+- Verlinke relevante Issues/PRs`,
+    placeholders: [
+      {
+        id: 'changesSummary',
+        label: 'Zusammenfassung der Änderungen',
+        type: 'textarea',
+        required: true,
+        placeholder: 'z.B. "Dokument-Management hinzugefügt, Dark Mode verbessert, Bugs in FormValidation gefixt"',
+        defaultValue: ''
+      },
+      {
+        id: 'deploymentTarget',
+        label: 'Deployment-Ziel',
+        type: 'select',
+        required: false,
+        options: ['Netlify', 'Vercel', 'GitHub Pages', 'Heroku', 'AWS', 'Kein Auto-Deploy'],
+        defaultValue: 'Netlify'
+      },
+      {
+        id: 'branch',
+        label: 'Git Branch',
+        type: 'text',
+        required: false,
+        placeholder: 'z.B. main, master, develop',
+        defaultValue: 'main'
+      },
+      {
+        id: 'version',
+        label: 'Version (optional, für Tags)',
+        type: 'text',
+        required: false,
+        placeholder: 'z.B. 1.2.0',
+        defaultValue: ''
+      },
+      {
+        id: 'liveUrl',
+        label: 'Live-URL zum Testen',
+        type: 'text',
+        required: false,
+        placeholder: 'z.B. https://your-app.netlify.app',
+        defaultValue: ''
+      },
+      {
+        id: 'customCheckpoint',
+        label: 'Zusätzlicher Checkpoint (optional)',
+        type: 'text',
+        required: false,
+        placeholder: 'z.B. "Alle Bilder optimiert" oder "Changelog aktualisiert"',
+        defaultValue: 'Alle Änderungen getestet'
+      }
+    ],
+    longDescription: 'Dieser Snippet hilft dir dabei, einen strukturierten Git-Workflow durchzuführen. Claude analysiert deine Änderungen, schlägt eine semantische Commit-Message vor, gibt dir eine Pre-Push Checkliste und die exakten Git-Commands. Perfekt um nichts zu vergessen und professionelle Commits zu erstellen.',
+    whenToUse: 'Verwende diesen Snippet vor jedem Git Push, besonders bei größeren Features oder vor Deployments. Ideal wenn du sicherstellen willst, dass nichts vergessen wird und deine Commit-Historie sauber bleibt. Nicht nötig für ganz kleine Typo-Fixes.',
+    useCase: 'Du hast gerade das Dokumenten-Management-System fertiggestellt und möchtest es nach GitHub pushen und auf Netlify deployen. Der Snippet hilft dir dabei, alle Änderungen zu kategorisieren, eine aussagekräftige Commit-Message zu erstellen, nichts zu vergessen (Tests, Build, etc.) und gibt dir die exakten Commands.',
+    fieldGuide: [
+      {
+        fieldId: 'changesSummary',
+        explanation: 'Beschreibe kurz alle Änderungen die du gemacht hast. Gruppiere nach Features, Fixes, Refactorings.',
+        example: 'Dokumenten-Management hinzugefügt (CRUD, Suche, Filter), Dark Mode verbessert, Bug in Copy-Funktion gefixt',
+        tips: 'Sei spezifisch! Liste die wichtigsten Änderungen auf. Claude nutzt das um die Commit-Message zu generieren.'
+      },
+      {
+        fieldId: 'deploymentTarget',
+        explanation: 'Wähle deine Deployment-Plattform. Claude gibt dir spezifische Hinweise für diese Plattform.',
+        example: 'Netlify',
+        tips: 'Wenn du "Kein Auto-Deploy" wählst, bekommst du nur Git-Commands ohne Deployment-Hinweise.'
+      },
+      {
+        fieldId: 'branch',
+        explanation: 'Der Git-Branch in den du pushen möchtest.',
+        example: 'main',
+        tips: 'Standard ist meist "main" oder "master". Feature-Branches haben oft Namen wie "feature/document-management".'
+      },
+      {
+        fieldId: 'version',
+        explanation: 'Optional: Versionsnummer wenn du einen Release-Tag erstellen möchtest (Semantic Versioning).',
+        example: '1.2.0',
+        tips: 'Format: Major.Minor.Patch (z.B. 1.2.0). Lass leer wenn kein Tag nötig.'
+      },
+      {
+        fieldId: 'liveUrl',
+        explanation: 'Die URL deiner deployed App, um sie nach dem Push zu testen.',
+        example: 'https://claude-prompt-builder.netlify.app',
+        tips: 'Claude gibt dir eine Post-Deployment Checkliste mit dieser URL.'
+      },
+      {
+        fieldId: 'customCheckpoint',
+        explanation: 'Ein zusätzlicher Check den du vor dem Push machen möchtest.',
+        example: 'Screenshots für README erstellt',
+        tips: 'Optional. Füge projekt-spezifische Checks hinzu die du nicht vergessen willst.'
+      }
+    ]
+  },
+
+  // 18. Projekt-Analyse & Kontext
+  {
+    id: 'cprojectanalysis',
+    name: 'Projekt-Analyse & Kontext',
+    description: 'Claude analysiert das Projekt und lernt Struktur, Konventionen und Kontext kennen',
+    category: 'start',
+    icon: '🔍',
+    template: `[Kontext: DEVELOPMENT.md - Modulare Architektur]
+
+🔍 Projekt-Analyse & Kontext-Aufbau
+
+Bitte analysiere dieses Projekt gründlich, damit ich optimal weiterarbeiten kann.
+
+Analyse-Fokus: {{analysisFocus}}
+Spezifische Bereiche: {{specificAreas}}
+
+**Phase 1 - Projekt-Struktur verstehen:**
+
+1. **Ordner-Struktur analysieren:**
+   - Welche Haupt-Ordner gibt es? (src/, components/, features/, etc.)
+   - Wie ist der Code organisiert? (nach Features, nach Typen, etc.)
+   - Gibt es Patterns die durchgängig verwendet werden?
+   - Wo liegen wichtige Dateien? (Config, Types, Utils, Constants)
+
+2. **Technologie-Stack identifizieren:**
+   - Framework: React, Vue, Angular, etc.?
+   - Sprache: TypeScript oder JavaScript?
+   - Build-Tool: Vite, Webpack, etc.?
+   - Styling: Tailwind, CSS Modules, Styled Components?
+   - State Management: Redux, Zustand, Context, etc.?
+   - Testing: Jest, Vitest, React Testing Library?
+   - Weitere wichtige Libraries?
+
+3. **Architektur-Muster erkennen:**
+   - Wie kommunizieren Komponenten? (Props, Context, Events)
+   - Gibt es eine klare Trennung von UI und Business Logic?
+   - Werden Custom Hooks verwendet?
+   - Service Layer vorhanden?
+   - Wie wird Routing gehandhabt?
+
+**Phase 2 - Code-Konventionen verstehen:**
+
+4. **Naming Conventions:**
+   - Wie werden Komponenten benannt? (PascalCase?)
+   - Wie werden Funktionen benannt? (camelCase?)
+   - Wie werden Dateien benannt? (Component.tsx, component.tsx?)
+   - Gibt es Präfixe/Suffixe? (use-, with-, I-, Type, etc.)
+
+5. **Code-Style analysieren:**
+   - Welches Formatting wird verwendet? (Prettier Config?)
+   - Single vs. Double Quotes?
+   - Semicolons ja/nein?
+   - Import-Reihenfolge?
+   - Wie werden Types definiert? (Interface vs. Type?)
+
+6. **Komponenten-Patterns:**
+   - Functional vs. Class Components?
+   - Props-Destructuring im Parameter oder im Body?
+   - Wo werden Types definiert? (Inline, separate .types.ts?)
+   - Export-Pattern? (Named vs. Default Export)
+
+**Phase 3 - Business Logic verstehen:**
+
+7. **Haupt-Features identifizieren:**
+   - Was macht diese App/dieses Projekt?
+   - Welche Haupt-Features gibt es?
+   - Wie hängen die Features zusammen?
+   - Gibt es einen typischen User-Flow?
+
+8. **Daten-Management:**
+   - Wo kommen die Daten her? (API, localStorage, etc.)
+   - Wie werden Daten strukturiert?
+   - Gibt es zentrale Type-Definitionen?
+   - Wie wird State verwaltet?
+
+9. **Abhängigkeiten verstehen:**
+   - Welche Komponenten sind stark vernetzt?
+   - Gibt es zentrale "Core"-Komponenten?
+   - Welche Utils/Helpers werden häufig verwendet?
+   - Gibt es Shared Constants oder Config?
+
+**Phase 4 - Projekt-Kontext & Besonderheiten:**
+
+10. **Dokumentation prüfen:**
+    - Gibt es eine README.md? Was steht drin?
+    - Gibt es DEVELOPMENT.md oder ähnliche Docs?
+    - Sind Komponenten dokumentiert? (JSDoc)
+    - Gibt es TODOs oder FIXMEs im Code?
+
+11. **Besonderheiten & Quirks:**
+    - Gibt es ungewöhnliche Patterns oder Lösungen?
+    - Warum wurden bestimmte Entscheidungen getroffen?
+    - Gibt es Legacy-Code oder Tech-Debt?
+    - Welche Teile sind "Work in Progress"?
+
+12. **Pain Points identifizieren:**
+    - Was könnte verbessert werden?
+    - Gibt es Code-Smells?
+    - Wo ist die Komplexität hoch?
+    - Welche Bereiche brauchen Refactoring?
+
+**Phase 5 - Zusammenfassung & Empfehlungen:**
+
+13. **Projekt-Snapshot:**
+    Erstelle eine prägnante Zusammenfassung:
+    - Tech-Stack: [Liste]
+    - Architektur: [Beschreibung]
+    - Haupt-Features: [Liste]
+    - Code-Qualität: [Einschätzung 1-10]
+    - Besonderheiten: [Liste]
+
+14. **Mental Model:**
+    Erkläre mir wie du das Projekt verstehst:
+    - Welche Metapher/Analogie passt zum Projekt?
+    - Wie würdest du jemandem das Projekt in 3 Sätzen erklären?
+    - Was ist das "Herz" des Projekts?
+
+15. **Nächste Schritte:**
+    Basierend auf deiner Analyse:
+    - Was sollte als nächstes gebaut werden?
+    - Welche Quick Wins gibt es?
+    - Wo sollte man vorsichtig sein?
+    - Was brauchst du noch zu wissen?
+
+**Spezielle Analyse-Anforderungen:**
+{{additionalRequirements}}
+
+**Output-Format:**
+- Strukturiert mit klaren Überschriften
+- Konkrete Code-Beispiele wo relevant
+- Priorisierte Empfehlungen
+- Visuelle Diagramme (ASCII) für Architektur falls hilfreich
+
+WICHTIG:
+- Sei gründlich aber fokussiert auf {{analysisFocus}}
+- Erkenne Patterns, nicht nur Facts
+- Stelle Fragen wenn etwas unklar ist
+- Deine Analyse ist die Basis für alle weiteren Tasks!`,
+    placeholders: [
+      {
+        id: 'analysisFocus',
+        label: 'Analyse-Fokus',
+        type: 'select',
+        required: false,
+        options: [
+          'Vollständige Analyse (alles)',
+          'Architektur & Struktur',
+          'Code-Qualität & Best Practices',
+          'Business Logic & Features',
+          'Performance & Optimierungen',
+          'Testing & Dokumentation'
+        ],
+        defaultValue: 'Vollständige Analyse (alles)'
+      },
+      {
+        id: 'specificAreas',
+        label: 'Spezifische Bereiche (optional)',
+        type: 'textarea',
+        required: false,
+        placeholder: 'z.B. "Fokus auf Authentication-Flow" oder "Besonders State-Management analysieren"',
+        defaultValue: 'Alle Bereiche gleich wichtig'
+      },
+      {
+        id: 'additionalRequirements',
+        label: 'Zusätzliche Anforderungen',
+        type: 'textarea',
+        required: false,
+        placeholder: 'z.B. "Prüfe ob Code DEVELOPMENT.md entspricht" oder "Finde alle TODOs"',
+        defaultValue: ''
+      }
+    ],
+    longDescription: 'Dieser Snippet ist der perfekte zweite Schritt nach "Session Start". Claude analysiert das gesamte Projekt systematisch und baut ein tiefes Verständnis für Struktur, Konventionen, Business Logic und Besonderheiten auf. Dadurch kann er bei allen weiteren Tasks optimal mitarbeiten und die richtigen Entscheidungen treffen.',
+    whenToUse: 'Verwende diesen Snippet am Anfang einer neuen Session, direkt nach "Session Start", oder wenn Claude mit einem neuen Projekt arbeiten soll. Auch sinnvoll wenn du in ein bestehendes Projekt einsteigst und Claude dir einen Überblick geben soll. Nicht nötig wenn du nur kleine Änderungen an bekanntem Code machst.',
+    useCase: 'Du hast gerade ein neues React-Projekt von einem Kollegen übernommen und möchtest, dass Claude dir hilft es weiterzuentwickeln. Mit diesem Snippet analysiert Claude die komplette Struktur, erkennt verwendete Patterns, identifiziert die Haupt-Features und gibt dir eine Zusammenfassung. Danach kann Claude präzise an dem Projekt weiterarbeiten ohne gegen bestehende Konventionen zu verstoßen.',
+    fieldGuide: [
+      {
+        fieldId: 'analysisFocus',
+        explanation: 'Wähle worauf Claude sich hauptsächlich konzentrieren soll. "Vollständige Analyse" macht eine umfassende Prüfung aller Bereiche.',
+        example: 'Vollständige Analyse (alles)',
+        tips: 'Bei großen Projekten kann ein spezifischer Fokus (z.B. nur Architektur) schneller sein. Bei neuen Projekten: Immer "Vollständige Analyse" wählen.'
+      },
+      {
+        fieldId: 'specificAreas',
+        explanation: 'Optional: Nenne spezifische Bereiche, Komponenten oder Features die Claude besonders genau analysieren soll.',
+        example: 'Authentication-System, State-Management mit Zustand, API-Integration',
+        tips: 'Lass leer für gleichmäßige Analyse. Nutze es wenn du weißt, dass bestimmte Bereiche komplex oder wichtig sind.'
+      },
+      {
+        fieldId: 'additionalRequirements',
+        explanation: 'Optional: Zusätzliche Dinge die Claude prüfen oder beachten soll während der Analyse.',
+        example: 'Finde alle TODOs und FIXMEs, Prüfe ob TypeScript strict mode verwendet wird',
+        tips: 'Gut für spezielle Checks: Performance-Issues, Security-Probleme, Dokumentations-Lücken, etc.'
+      }
+    ]
+  }
 ];
