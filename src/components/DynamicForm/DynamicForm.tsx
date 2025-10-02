@@ -80,6 +80,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
                       )}
                     </div>
                   }
+                  maxWidth="xl"
                 >
                   <span className="ml-2 cursor-help text-blue-500 hover:text-blue-600 transition-colors">
                     ℹ️

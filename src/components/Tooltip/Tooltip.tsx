@@ -12,6 +12,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,
   position = 'top',
+  maxWidth = 'xs',
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -33,6 +34,16 @@ export const Tooltip: React.FC<TooltipProps> = ({
       'right-full top-1/2 -translate-y-1/2 border-r-gray-900 dark:border-r-gray-700',
   };
 
+  // Max width classes for tooltip
+  const maxWidthClasses = {
+    xs: 'max-w-xs',   // 320px
+    sm: 'max-w-sm',   // 384px
+    md: 'max-w-md',   // 448px
+    lg: 'max-w-lg',   // 512px
+    xl: 'max-w-xl',   // 576px
+    '2xl': 'max-w-2xl', // 672px
+  };
+
   return (
     <div className="relative inline-block">
       {/* Trigger */}
@@ -50,7 +61,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
         <div
           className={`absolute z-50 ${positionClasses[position]} pointer-events-none`}
         >
-          <div className="relative bg-gray-900 dark:bg-gray-700 text-white px-3 py-2 rounded-lg shadow-lg max-w-xs animate-in fade-in zoom-in-95 duration-200">
+          <div className={`relative bg-gray-900 dark:bg-gray-700 text-white px-3 py-2 rounded-lg shadow-lg ${maxWidthClasses[maxWidth]} animate-in fade-in zoom-in-95 duration-200`}>
             {content}
 
             {/* Arrow */}
